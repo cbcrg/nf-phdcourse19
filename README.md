@@ -52,7 +52,7 @@ conda install nextflow
 Finally, clone this repository with the following command: 
 
 ```
-git clone https://github.com/nextflow-io/gccbosc18-training.git && cd gccbosc18-training
+git clone https://github.com/cbcrg/nf-phdcourse18 && cd nf-phdcourse18
 ```
 
 ## Nextflow hands-on 
@@ -86,8 +86,7 @@ that will be used as the pipeline output directory.
 
 #### Exercise 1.2 
 
-Modify the `script1.nf` to print all the pipeline parameters by using a single `println` 
-command and a [multiline string](https://www.nextflow.io/docs/latest/script.html#multi-line-strings)
+Modify the `script1.nf` to print all the pipeline parameters by using a single `println` command and a [multiline string](https://www.nextflow.io/docs/latest/script.html#multi-line-strings)
 statement.  
 
 Tip: see an example [here](https://github.com/nextflow-io/rnaseq-nf/blob/3b5b49f/main.nf#L41-L48).
@@ -262,8 +261,7 @@ Add a [tag](https://www.nextflow.io/docs/latest/process.html#tag) directive to t
 #### Exercise 4.2 
 
 Add a [publishDir](https://www.nextflow.io/docs/latest/process.html#publishdir) directive 
-to the `quantification` process to store the process results into a directory of your 
-choice. 
+to the `quantification` process to store the process results into a directory of your choice. 
 
 #### Recap 
 
@@ -517,8 +515,7 @@ profiles {
 ```
 
 The above configuration defines two profiles: `standard` and `cluster`. The name of the 
-profile to use can be specified when running the pipeline script by using the `-profile` 
-option. For example: 
+profile to use can be specified when running the pipeline script by using the `-profile` option. For example: 
 
 ```
 nextflow run script7.nf -profile cluster 
@@ -572,24 +569,6 @@ Revision are defined by using Git tags or branches defined in the project reposi
 
 This allows a precise control of the changes in your project files and dependencies over time. 
 
- 
-## Singularity 
-
-[Singularity](http://singularity.lbl.gov) is container runtime designed to work in HPC data center, where the usage
-of Docker is generally not allowed due to security constraints. 
-
-Singularity implements the container execution model similarly to Docker however using 
-a complete different implementation design.
-
-A Singularity container image is archived in a plain file that can be stored in shared 
-file system and accessed by many computing nodes managed by a batch scheduler.
-
-Notably Singularity is able to convert Docker container images to its native format and 
-execute it. 
-
-Nextflow streamline this process enabling dead-easy interoperability between the two 
-container runtime. To run a containerized script replace the `docker.enabled = true` 
-with the `singularity.enabled = true` setting. 
 
 ## Conda/Bioconda packages
 
@@ -642,6 +621,225 @@ See [here](https://www.nextflow.io/docs/latest/tracing.html#dag-visualisation) f
 
 Note: runtime metrics may be incomplete for run short running tasks as in the case of this tutorial.
 
+## Docker hands-on 
+
+Get practice with basic Docker commands to pull, run and build your own containers.
+ 
+A container is a ready-to-run Linux environment which can be executed in an isolated 
+manner from the hosting system. It has own copy of the file system, processes space,
+memory management, etc. 
+ 
+Containers are a Linux feature known as *Control Groups* or [Ccgroups](https://en.wikipedia.org/wiki/Cgroups)
+introduced with kernel 2.6. 
+
+Docker adds to this concept an handy management tool to build, run and share container images. 
+
+These images can be uploaded and published in a centralised repository know as 
+[Docker Hub](https://hub.docker.com), or hosted by other parties like for example [Quay](https://quay.io).
+
+
+### Step 1 - Run a container 
+
+Run a container is easy as using the following command: 
+
+```
+docker run <container-name> 
+```
+
+For example: 
+
+```
+docker run hello-world  
+```
+
+### Step 2 - Pull a container 
+
+The pull command allows you to download a Docker image without running it. For example: 
+
+```
+docker pull debian:wheezy 
+```
+
+The above command download a Debian Linux image.
+
+
+### Step 3 - Run a container in interactive mode 
+
+Launching a BASH shell in the container allows you to operate in an interactive mode 
+in the containerised operating system. For example: 
+
+```
+docker run -it debian:wheezy bash 
+``` 
+
+Once launched the container you wil noticed that's running as root (!). 
+Use the usual commands to navigate in the file system.
+
+To exit from the container, stop the BASH session with the exit command.
+
+### Step 4 - Your first Dockerfile
+
+Docker images are created by using a so called `Dockerfile` i.e. a simple text file 
+containing a list of commands to be executed to assemble and configure the image
+with the software packages required.    
+
+In this step you will create a Docker image containing the Samtools tool.
+
+
+Warning: the Docker build process automatically copies all files that are located in the 
+current directory to the Docker daemon in order to create the image. This can take 
+a lot of time when big/many files exist. For this reason it's important to *always* work in 
+a directory containing only the files you really need to include in your Docker image. 
+Alternatively you can use the `.dockerignore` file to select the path to exclude from the build. 
+
+Then use your favourite editor eg. `vim` to create a file named `Dockerfile` and copy the 
+following content: 
+
+```
+FROM debian:wheezy 
+
+MAINTAINER <your name>
+
+RUN apt-get update && apt-get install -y curl cowsay 
+
+ENV PATH=$PATH:/usr/games/
+   
+```
+
+When done save the file. 
+
+
+### Step 5 - Build the image  
+
+Build the Docker image by using the following command: 
+
+```
+docker build -t my-image .
+```
+
+Note: don't miss the dot in the above command. When it completes, verify that the image 
+has been created listing all available images: 
+
+```
+docker images
+```
+
+You can try your new container by running this command: 
+
+```
+docker run my-image cowsay Hello Docker!
+```
+
+### Step 6 - Add a software package to the image
+
+Add the Salmon package to the Docker image by adding to the `Dockerfile` the following snippet: 
+
+```
+RUN curl -sSL https://github.com/COMBINE-lab/salmon/releases/download/v0.8.2/Salmon-0.8.2_linux_x86_64.tar.gz | tar xz \
+ && mv /Salmon-*/bin/* /usr/bin/ \
+ && mv /Salmon-*/lib/* /usr/lib/
+```
+
+Save the file and build again the image with the same command as before: 
+
+```
+docker build -t my-image .
+```
+
+You will notice that it creates a new Docker image with the same name *but* with a 
+different image ID. 
+
+### Step 7 - Run Salmon in the container 
+
+Check that everything is fine running Salmon in the container as shown below: 
+
+```
+docker run my-image salmon --version
+```
+
+You can even launch a container in an interactive mode by using the following command: 
+
+```
+docker run -it my-image bash
+```
+
+Use the `exit` command to terminate the interactive session. 
+
+
+### Step 8 - File system mounts
+
+Create an genome index file by running Salmon in the container. 
+
+Try to run Bowtie in the container with the following command: 
+
+```
+docker run my-image \
+  salmon index -t $PWD/data/ggal/transcriptome.fa -i index
+```
+
+The above command fails because Salmon cannot access the input file.
+
+This happens because the container runs in a complete separate file system and 
+it cannot access the hosting file system by default. 
+
+You will need to use the `--volume` command line option to mount the input file(s) eg. 
+
+```
+docker run --volume $PWD/data/ggal/transcriptome.fa:/transcriptome.fa my-image \
+  salmon index -t /transcriptome.fa -i index 
+```
+
+An easier way is to mount a parent directory to an identical one in the container, 
+this allows you to use the same path when running it in the container eg. 
+
+```
+docker run --volume $HOME:$HOME --workdir $PWD my-image \
+  salmon index -t $PWD/data/ggal/transcriptome.fa -i index
+```
+
+### Step 9 - Upload the container in the Docker Hub (bonus)
+
+Publish your container in the Docker Hub to share it with other people. 
+
+Create an account in the https://hub.docker.com web site. Then from your shell terminal run 
+the following command, entering the user name and password you specified registering in the Hub: 
+
+```
+docker login 
+``` 
+
+Tag the image with your Docker user name account: 
+
+```
+docker tag my-image <user-name>/my-image 
+```
+
+Finally push it to the Docker Hub:
+
+```
+docker push <user-name>/my-image 
+```
+
+After that anyone will be able to download it by using the command: 
+
+```
+docker pull <user-name>/my-image 
+```
+
+Note how after a pull and push operation, Docker prints the container digest number e.g. 
+
+```
+Digest: sha256:aeacbd7ea1154f263cda972a96920fb228b2033544c2641476350b9317dab266
+Status: Downloaded newer image for nextflow/rnaseq-nf:latest
+```
+
+This is a unique and immutable identifier that can be used to reference container image 
+in a univocally manner. For example: 
+
+```
+docker pull nextflow/rnaseq-nf@sha256:aeacbd7ea1154f263cda972a96920fb228b2033544c2641476350b9317dab266
+```
+
 ## More resources 
 
 * [Nextflow documentation](http://docs.nextflow.io) - The Nextflow docs home.
@@ -649,9 +847,3 @@ Note: runtime metrics may be incomplete for run short running tasks as in the ca
 * [CalliNGS-NF](https://github.com/CRG-CNAG/CalliNGS-NF) - An Variant calling pipeline implementing GATK best practices. 
 * [nf-core](http://nf-co.re/) - A community collection of production ready genomic pipelines. 
 
-## NF workshop ! 
-
-We are organising a Nextflow workshop on November 22-23, '18 in Barcelona. For details and registration [check it out here](http://www.crg.eu/en/event/coursescrg-nextflow-reproducible-silico-genomics-0).
-
-
-![NF workshop poster](img/nf-hack18.png)
