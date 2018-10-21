@@ -26,6 +26,19 @@ How?
 * [Graphviz](http://www.graphviz.org/) (optional)
 * AWS Batch computing environment properly configured (optional)
 
+## Launch your AWS VM workspace 
+
+1. SSH in the login node: 
+
+     `ssh login@34.247.10.237`
+    
+2. Launch your AWS instance  
+
+   `launch-ec2.sh`
+   
+3. Open a new shell terminal and SSH to the new instance  
+
+   `ssh me@<IP address printed by the previous command>`
 
 ## Installation 
 
