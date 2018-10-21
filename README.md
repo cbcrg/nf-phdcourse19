@@ -165,7 +165,7 @@ operator (do not confuse it with the `println` statement seen previously).
 
 #### Exercise 2.3 
 
-Use the command `tree -a work` to see how Nextflow organises the process work directory. 
+Use the command `tree work` to see how Nextflow organises the process work directory. 
  
 #### Recap 
 
