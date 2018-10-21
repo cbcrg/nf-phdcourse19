@@ -26,10 +26,13 @@ set -u
 
 X_TYPE=${1:-t2.xlarge}
 X_DISK=${2:-50}
-X_AMI=${3:-ami-03a65ef5d69d3fb08}
+X_AMI=${3:-$(curl -fsSL http://169.254.169.254/latest/meta-data/ami-id)}
 X_SUBNET=${4:-subnet-05222a43} 
 X_RND=$(dd bs=12 count=1 if=/dev/urandom 2>/dev/null | base64 | tr +/ 0A)
 X_MARKER=.launcher-$X_RND
+X_ZONE=`curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone`
+
+export AWS_DEFAULT_REGION="`echo \"$X_ZONE\" | sed 's/[a-z]$//'`"
 
 function getRootDevice() {
   local ami=$1
@@ -132,7 +135,8 @@ wait $spinner_pid 2>/dev/null
 echo "  ssh me@$X_IP" > $HOME/launch-ec2.log
 echo ""
 echo ""
-echo "* The instance is ready -- Login with the following command:" 
+echo "* The instance is ready!"
+echo "* Open a new shell terminal and login with the following command:" 
 echo "" 
 echo "  ssh me@$X_IP"
 echo ""
