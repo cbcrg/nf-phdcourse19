@@ -26,19 +26,6 @@ How?
 * [Graphviz](http://www.graphviz.org/) (optional)
 * AWS Batch computing environment properly configured (optional)
 
-## Launch your AWS VM workspace 
-
-1. SSH in the login node: 
-
-     `ssh login@34.247.10.237`
-    
-2. Launch your AWS instance  
-
-   `launch-ec2.sh`
-   
-3. Open a new shell terminal and SSH to the new instance  
-
-   `ssh me@<IP address printed by the previous command>`
 
 ## Installation 
 
@@ -62,11 +49,17 @@ Having the Conda package manager installed in your computer, install Nextflow wi
 conda install nextflow
 ```
    
-Finally, clone this repository with the following command: 
+Then, clone this repository with the following command: 
 
 ```
 git clone https://github.com/cbcrg/nf-phdcourse18 && cd nf-phdcourse18
 ```
+
+Finally pull the following Docker container: 
+
+```
+docker pull nextflow/rnaseq-nf
+``` 
 
 ## Nextflow hands-on 
 
