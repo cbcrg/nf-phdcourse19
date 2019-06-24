@@ -6,7 +6,7 @@ params.transcriptome = "$baseDir/data/ggal/transcriptome.fa"
 params.multiqc = "$baseDir/multiqc"
 params.outdir = "results"
 
-println """\
+log.info """\
          R N A S E Q - N F   P I P E L I N E    
          ===================================
          transcriptome: ${params.transcriptome}
@@ -40,8 +40,7 @@ process index {
 
 
 Channel 
-    .fromFilePairs( params.reads )
-    .ifEmpty { error "Oops! Cannot find any file matching: ${params.reads}"  }
+    .fromFilePairs( params.reads, checkIfExists:true )
     .set { read_pairs_ch } 
 
 process quantification {
@@ -55,7 +54,7 @@ process quantification {
  
     script:
     """
-    salmon quant --threads $task.cpus --libType=U -i index -1 ${reads[0]} -2 ${reads[1]} -o $pair_id
+    salmon quant --threads $task.cpus --libType=U -i $index -1 ${reads[0]} -2 ${reads[1]} -o $pair_id
     """
 }
 
