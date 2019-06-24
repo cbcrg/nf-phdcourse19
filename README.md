@@ -1,4 +1,4 @@
-# Nextflow training for the Bioinformatics Summer School 2019
+# Nextflow training for Summer School in Bioinformatics 2019
 
 ## Nextflow in a nutshell 
 
@@ -32,7 +32,7 @@ A workflow engine for data analysis pipelines with a strong focus on enabling:
 Install Nextflow by using the following command: 
 
 ```
-curl -fsSL https://get.nextflow.io | bash
+wget -qO- https://get.nextflow.io | bash
 ```
     
 The above snippet creates the `nextflow` launcher in the current directory. 
@@ -52,7 +52,7 @@ conda install nextflow
 Then, clone this repository with the following command: 
 
 ```
-git clone https://github.com/cbcrg/nf-summerschool && cd cbcrg/nf-summerschool
+git clone https://github.com/cbcrg/nf-summerschool.git && cd nf-summerschool
 ```
 
 Finally pull the following Docker container: 
@@ -92,10 +92,11 @@ that will be used as the pipeline output directory.
 
 #### Exercise 1.2 
 
-Modify the `script1.nf` to print all the pipeline parameters by using a single `println` command and a [multiline string](https://www.nextflow.io/docs/latest/script.html#multi-line-strings)
+Modify the `script1.nf` to print all the pipeline parameters using `log.info` instead
+of the `println` command and a [multiline string](https://www.nextflow.io/docs/latest/script.html#multi-line-strings)
 statement.  
 
-Tip: see an example [here](https://github.com/nextflow-io/rnaseq-nf/blob/3b5b49f/main.nf#L41-L48).
+Tip: see an example [here](https://github.com/nextflow-io/rnaseq-nf/blob/42974a2/main.nf#L34-L40).
 
 #### Recap 
 
@@ -105,6 +106,7 @@ In this step you have learned:
 2. How to pass parameters by using the command line
 3. The use of `$var` and `${var}` variable placeholders 
 4. How to use multiline strings 
+5. How to use `log.info` to report values 
 
 
 ### Step 2 - Create transcriptome index file
@@ -153,8 +155,7 @@ Enable the Docker execution by default adding the above setting in the `nextflow
 
 #### Exercise 2.2 
 
-Print the output of the `index_ch` channel by using the [println](https://www.nextflow.io/docs/latest/operator.html#println)
-operator (do not confuse it with the `println` statement seen previously).
+Print the output of the `index_ch` channel by using the [view](https://www.nextflow.io/docs/latest/operator.html#view) operator.
 
 #### Exercise 2.3 
 
@@ -178,7 +179,7 @@ This step shows how to match *read* files into pairs, so they can be mapped by *
 Edit the script `script3.nf` and add the following statement as the last line: 
 
 ```
-read_pairs_ch.println()
+read_pairs_ch.view()
 ```
 
 Save it and execute it with the following command: 
@@ -210,17 +211,16 @@ of `=` assignment to define the `read_pairs_ch` channel.
 
 #### Exercise 3.2 
 
-Use the [ifEmpty](https://www.nextflow.io/docs/latest/operator.html#ifempty) operator 
-to check if the `read_pairs_ch` contains at least an item. 
+Use the `checkIfExists` for the [fromFilePairs](https://www.nextflow.io/docs/latest/channel.html#fromfilepairs) method to make sure it returns some file pairs. 
 
 
 #### Recap 
 
 In this step you have learned: 
 
-1. How to use `fromFilePairs` to handle read pair files
-2. How to use the `set` operator to define a new channel variable 
-3. How to use the `ifEmpty` operator to check if a channel is empty
+1. How to use `fromFilePairs` to handle read pair files.
+2. How to use the `set` operator to define a new channel variable.
+3. How to use the `checkIfExists` option.
 
 
 ### Step 4 - Perform expression quantification 
