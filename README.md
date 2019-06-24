@@ -1,22 +1,22 @@
-# Nextflow training for Phd course 2018
+# Nextflow training for the Bioinformatics Summer School 2019
 
 ## Nextflow in a nutshell 
 
-A workflow engine for data analysis pipelines with a string focus on: 
+A workflow engine for data analysis pipelines with a strong focus on enabling: 
 * Portability 
 * Reproducibility 
 * Scalability 
 * Usability 
 
-How? 
+### How? 
 * Functional/reactive programming model 
-* Decoupling and tasks isolation 
-* Concise DSL for recurrent task operations
-* Pragmatic, allows quick prototyping and iterations 
+* Decoupling and isolating tasks 
+* Concise domain specific language for recurrent task operations
+* Pragmatic, allowing quick prototyping and iterations 
 * Hide complexity
 * Coexists with errors (!) 
 
-## Prerequisite
+### Prerequisite
 
 * Unix-like OS (Linux, macOS, etc.)
 * [Java](http://jdk.java.net/) 8 or later 
@@ -52,7 +52,7 @@ conda install nextflow
 Then, clone this repository with the following command: 
 
 ```
-git clone https://github.com/cbcrg/nf-phdcourse18 && cd nf-phdcourse18
+git clone https://github.com/cbcrg/nf-summerschool && cd cbcrg/nf-summerschool
 ```
 
 Finally pull the following Docker container: 
@@ -63,7 +63,7 @@ docker pull nextflow/rnaseq-nf
 
 ## Nextflow hands-on 
 
-During this tutorial you will implement a proof of concept of a RNA-Seq pipeline which: 
+During this tutorial you will implement a proof of concept of a RNA-seq pipeline which: 
 
 1. Indexes a trascriptome file.
 2. Performs quality controls 
