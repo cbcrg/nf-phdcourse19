@@ -32,7 +32,7 @@ How?
 Install Nextflow by using the following command: 
 
 ```
-curl -fsSL https://get.nextflow.io | bash
+wget -qO- https://get.nextflow.io | bash
 ```
     
 The above snippet creates the `nextflow` launcher in the current directory. 
