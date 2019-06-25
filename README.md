@@ -42,18 +42,6 @@ curl https://get.nextflow.io | bash
 ```
     
 The above snippet creates the `nextflow` launcher in the current directory. 
-You may complete the installation moving it into a directory in your `PATH` environment variable, e.g.: 
-
-```
-mv nextflow $HOME/bin
-``` 
-
-Nextflow is also available through [Bioconda](https://anaconda.org/bioconda/nextflow). 
-Having the Conda package manager installed in your computer, install Nextflow with this command:  
-
-```
-conda install nextflow
-```
 
 Finally pull the following Docker container: 
 
