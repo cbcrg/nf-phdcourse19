@@ -29,14 +29,20 @@ A workflow engine for data analysis pipelines with a strong focus on enabling:
 
 ## Installation 
 
-Install Nextflow by using the following command: 
+Clone this repository with the following command: 
 
 ```
-wget -qO- https://get.nextflow.io | bash
+git clone https://github.com/cbcrg/nf-summerschool.git && cd nf-summerschool
+```
+
+Then, install Nextflow by using the following command: 
+
+```
+curl https://get.nextflow.io | bash
 ```
     
 The above snippet creates the `nextflow` launcher in the current directory. 
-Complete the installation moving it into a directory in your `PATH` environment variable, e.g.: 
+You may complete the installation moving it into a directory in your `PATH` environment variable, e.g.: 
 
 ```
 mv nextflow $HOME/bin
@@ -47,12 +53,6 @@ Having the Conda package manager installed in your computer, install Nextflow wi
 
 ```
 conda install nextflow
-```
-   
-Then, clone this repository with the following command: 
-
-```
-git clone https://github.com/cbcrg/nf-summerschool.git && cd nf-summerschool
 ```
 
 Finally pull the following Docker container: 
@@ -76,13 +76,13 @@ The script `script1.nf` defines the pipeline input parameters. Run it by using t
 following command: 
 
 ```
-nextflow run script1.nf
+./nextflow run script1.nf
 ```
 
 Try to specify a different input parameter, for example: 
 
 ```
-nextflow run script1.nf --reads this/and/that
+./nextflow run script1.nf --reads this/and/that
 ```
 
 #### Exercise 1.1 
@@ -128,7 +128,7 @@ that it is used in the command script to reference that file in the Salmon comma
 Try to run it by using the command: 
 
 ```
-nextflow run script2.nf
+./nextflow run script2.nf
 ```
 
 The execution will fail because Salmon is not installed in your environment. 
@@ -137,7 +137,7 @@ Add the command line option `-with-docker` to launch the execution through a Doc
 as shown below: 
 
 ```
-nextflow run script2.nf -with-docker
+./nextflow run script2.nf -with-docker
 ```
 
 This time it works because it uses the Docker container `nextflow/rnaseq-nf` defined in the 
@@ -185,7 +185,7 @@ read_pairs_ch.view()
 Save it and execute it with the following command: 
 
 ```
-nextflow run script3.nf
+./nextflow run script3.nf
 ```
 
 It will print an output similar to the one shown below:
@@ -201,7 +201,7 @@ representing the actual files.
 Try it again specifying different read files by using a glob pattern:
 
 ```
-nextflow run script3.nf --reads 'data/ggal/*_{1,2}.fq'
+./nextflow run script3.nf --reads 'data/ggal/*_{1,2}.fq'
 ```
 
 #### Exercise 3.1 
@@ -238,7 +238,7 @@ by the `read_pairs_ch` channel.
 Execute it by using the following command: 
 
 ```
-nextflow run script4.nf -resume
+./nextflow run script4.nf -resume
 ```
 
 You will see the execution of the `quantification` process. 
@@ -248,7 +248,7 @@ The `-resume` option cause the execution of any step that has been already proce
 Try to execute it with more read files as shown below: 
 
 ```
-nextflow run script4.nf -resume --reads 'data/ggal/*_{1,2}.fq'
+./nextflow run script4.nf -resume --reads 'data/ggal/*_{1,2}.fq'
 ```
 
 You will notice that the `quantification` process is executed more than 
@@ -287,7 +287,7 @@ read pairs which are provided to the `quantification` steps
 You can run it by using the following command: 
 
 ```
-nextflow run script5.nf -resume 
+./nextflow run script5.nf -resume 
 ``` 
 
 The script will report the following error message: 
@@ -321,7 +321,7 @@ a final report by using the [MultiQC](http://multiqc.info/) tool.
 Execute the script with the following command: 
 
 ```
-nextflow run script6.nf -resume --reads 'data/ggal/*_{1,2}.fq' 
+./nextflow run script6.nf -resume --reads 'data/ggal/*_{1,2}.fq' 
 ```
 
 It creates the final report in the `results` folder in the current work directory. 
@@ -356,7 +356,7 @@ when the script completes.
 Try to run it by using the following command: 
 
 ```
-nextflow run script7.nf -resume --reads 'data/ggal/*_{1,2}.fq'
+./nextflow run script7.nf -resume --reads 'data/ggal/*_{1,2}.fq'
 ```
 
 #### Bonus! 
@@ -409,7 +409,7 @@ the following code:
 Run it as before: 
 
 ```
-nextflow run script7.nf -resume --reads 'data/ggal/*_{1,2}.fq'
+./nextflow run script7.nf -resume --reads 'data/ggal/*_{1,2}.fq'
 ```
 
 #### Recap 
@@ -524,7 +524,7 @@ The above configuration defines two profiles: `standard` and `cluster`. The name
 profile to use can be specified when running the pipeline script by using the `-profile` option. For example: 
 
 ```
-nextflow run script7.nf -profile cluster 
+./nextflow run script7.nf -profile cluster 
 ```
 
 The profile `standard` is used by default if no other profile is specified by the user. 
@@ -553,7 +553,7 @@ https://github.com/nextflow-io/rnaseq-nf
 You can run it by specifying the project name as shown below: 
 
 ```
-nextflow run nextflow-io/rnaseq-nf -with-docker
+./nextflow run nextflow-io/rnaseq-nf -with-docker
 ```
 
 It automatically downloads it and store in the `$HOME/.nextflow` folder. 
@@ -561,14 +561,14 @@ It automatically downloads it and store in the `$HOME/.nextflow` folder.
 Use the command `info` to show the project information, e.g.: 
 
 ```
-nextflow info nextflow-io/rnaseq-nf
+./nextflow info nextflow-io/rnaseq-nf
 ```
 
 Nextflow allows the execution of a specific *revision* of your project by using the `-r` 
 command line option. For Example: 
 
 ```
-nextflow run nextflow-io/rnaseq-nf -r dev
+./nextflow run nextflow-io/rnaseq-nf -r dev
 ```
 
 Revision are defined by using Git tags or branches defined in the project repository. 
@@ -586,7 +586,7 @@ To use a Conda environment with Nextflow specify it as a command line option
 as shown below: 
 
 ```
-nextflow run script7.nf -with-conda env.yml
+./nextflow run script7.nf -with-conda env.yml
 ```
 
 The use of a Conda environment can also be provided in the configuration file 
@@ -608,7 +608,7 @@ Run the [rnaseq-nf](https://github.com/nextflow-io/rnaseq-nf) pipeline
 previously introduced as shown below: 
 
 ```
-nextflow run rnaseq-nf -with-docker -with-report -with-trace -with-timeline -with-dag dag.png
+./nextflow run rnaseq-nf -with-docker -with-report -with-trace -with-timeline -with-dag dag.png
 ```
 
 The `-with-report` option enables the creation of the workflow execution report. Open 
