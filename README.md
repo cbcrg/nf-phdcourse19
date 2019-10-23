@@ -1,4 +1,4 @@
-# Nextflow training for Summer School in Bioinformatics 2019
+# Nextflow training for CRG PhD course 2019
 
 ## Nextflow in a nutshell 
 
@@ -32,7 +32,7 @@ A workflow engine for data analysis pipelines with a strong focus on enabling:
 Clone this repository with the following command: 
 
 ```
-git clone https://github.com/cbcrg/nf-summerschool.git && cd nf-summerschool
+git clone https://github.com/cbcrg/nf-phdcourse19.git && cd nf-phdcourse19
 ```
 
 Then, install Nextflow by using the following command: 
@@ -502,8 +502,8 @@ profiles {
     process.executor = 'awsbatch'
     process.queue = 'demo'
     process.container = 'nextflow/rnaseq-nf'  
-    executor.awscli = '/home/ec2-user/miniconda/bin/aws'
-    aws.region = 'eu-west-1'  
+    aws.region = 'eu-west-1'
+    aws.batch.cliPath = '/home/ec2-user/miniconda/bin/aws'
   }
 } 
 ```
